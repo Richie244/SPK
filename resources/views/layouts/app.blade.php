@@ -16,7 +16,7 @@
 </head>
 <body class="flex bg-gray-100 min-h-screen font-sans antialiased">
     <!-- Sidebar -->
-    @unless(request()->routeIs('login')) <!-- Sidebar hanya ditampilkan jika bukan halaman login -->
+    @unless(request()->routeIs('login', 'register')) <!-- Sidebar hanya ditampilkan jika bukan halaman login -->
         <aside class="w-64 bg-purple-700 text-white flex flex-col">
             <div class="p-4 text-center">
                 <h1 class="text-lg font-bold">SPK-SAW</h1>

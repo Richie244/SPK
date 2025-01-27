@@ -119,8 +119,8 @@ class University extends Model
     
         // Bobot kriteria (C1, C2, C3, C4)
         $weights = [
-            'SPP' => 0.3, // Bobot untuk SPP (Cost)
-            'Akreditasi' => 0.3, // Bobot untuk Akreditasi (Benefit)
+            'SPP' => 0.4, // Bobot untuk SPP (Cost)
+            'Akreditasi' => 0.2, // Bobot untuk Akreditasi (Benefit)
             'DosenS3' => 0.2, // Bobot untuk Dosen S3 (Benefit)
             'Lokasi' => 0.2, // Bobot untuk Lokasi (Benefit)
         ];
