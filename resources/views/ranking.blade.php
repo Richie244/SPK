@@ -11,7 +11,7 @@
                 <h2 class="text-2xl font-bold">Hasil Ranking Universitas</h2>
                 <form method="GET" action="{{ route('ranking') }}">
                     <select name="filter" class="border border-gray-300 rounded px-4 py-2 w-32" onchange="this.form.submit()">
-                        <option value="" {{ request('filter') == '' ? 'selected' : '' }}>Semua</option>
+                        <option value="">Semua</option>
                         <option value="PTS" {{ request('filter') == 'PTS' ? 'selected' : '' }}>PTS</option>
                         <option value="PTN" {{ request('filter') == 'PTN' ? 'selected' : '' }}>PTN</option>
                     </select>

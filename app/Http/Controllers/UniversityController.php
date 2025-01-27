@@ -53,65 +53,51 @@ class UniversityController extends Controller
         ]);
     }
     
-    
-
     public function normalisasi(Request $request)
-    {
-        // Ambil filter dari request
-        $filter = $request->get('filter');
-    
-        // Hapus session jika ada
-        session()->forget('normalizedUniversities');
-    
-        // Ambil semua data universitas
-        $universities = University::all();
-    
-        // Jika ada filter, hanya ambil universitas yang sesuai dengan filter
-        if ($filter) {
-            $universities = $universities->where('pt', $filter);
-        }
-    
-        // Lakukan normalisasi hanya pada seluruh dataset
-        $normalizedUniversities = University::normalizeData($universities);
-    
-        // Simpan hasil normalisasi ke session
-        session(['normalizedUniversities' => $normalizedUniversities]);
-    
-        // Kirim data ke view
-        return view('normalisasi', [
-            'normalizedUniversities' => $normalizedUniversities,
-            'filter' => $filter, // Kirim filter ke view
-        ]);
-    }
-        
+{
+    // Ambil filter dari request
+    $filter = $request->get('filter');
+
+    // Ambil data universitas berdasarkan filter (untuk ditampilkan)
+    $universities = $filter 
+        ? University::where('pt', $filter)->get() 
+        : University::all();
+
+    // Normalisasi berdasarkan semua data (global)
+    $normalizedUniversities = University::normalizeData($universities);
+
+    // Kirim data ke view
+    return view('normalisasi', [
+        'normalizedUniversities' => $normalizedUniversities,
+        'filter' => $filter, // Kirim filter ke view
+    ]);
+}
 
     
+public function ranking(Request $request)
+{
+    // Ambil filter dari request
+    $filter = $request->get('filter');
 
-    public function ranking(Request $request)
-    {
-        // Ambil filter dari request
-        $filter = $request->get('filter');
-    
-        // Ambil semua data universitas (untuk normalisasi)
-        $allUniversities = University::all();
-    
-        // Ambil data universitas yang difilter (untuk ditampilkan)
-        $filteredUniversities = $filter 
-            ? $allUniversities->where('pt', $filter)
-            : $allUniversities;
-    
-        // Hitung ranking berdasarkan bobot dan normalisasi (menggunakan seluruh data)
-        $rankedUniversities = University::rankUniversitiesWithWeights($filteredUniversities);
-    
-        // Kirim data ke view
-        return view('ranking', [
-            'rankedUniversities' => $rankedUniversities, 
-            'filter' => $filter,
-        ]);
-    }
-    
+    // Ambil data berdasarkan filter
+    $filteredUniversities = $filter 
+        ? University::where('pt', $filter)->get() 
+        : University::all();
+
+    // Hitung ranking berdasarkan bobot dan normalisasi global
+    $rankedUniversities = University::rankUniversitiesWithWeights($filteredUniversities);
+
+    // Kirim data ke view
+    return view('ranking', [
+        'rankedUniversities' => $rankedUniversities, 
+        'filter' => $filter,
+    ]);
+}
 
 
+
+
+    
     public function forminput()
     {
         if (!Auth::check()) {
