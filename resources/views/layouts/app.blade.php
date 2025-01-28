@@ -16,7 +16,7 @@
 </head>
 <body class="flex bg-gray-100 min-h-screen font-sans antialiased">
     <!-- Sidebar -->
-    @unless(request()->routeIs('login', 'register')) <!-- Sidebar hanya ditampilkan jika bukan halaman login -->
+    @unless(request()->routeIs('login', 'register'))
         <aside class="w-64 bg-purple-700 text-white flex flex-col">
             <div class="p-4 text-center">
                 <h1 class="text-lg font-bold">SPK-SAW</h1>
@@ -24,21 +24,21 @@
             </div>
             <nav class="flex-1">
                 <ul>
-                    <li>
-                        <a href="/dashboard" class="block px-4 py-2 hover:bg-purple-800">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/range" class="block px-4 py-2 hover:bg-purple-800">Range</a>
-                    </li>
-                    <li>
-                        <a href="/normalisasi" class="block px-4 py-2 hover:bg-purple-800">Normalisasi</a>
-                    </li>
-                    <li>
-                        <a href="/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a>
-                    </li>
-                    <li>
-                        <a href="/data" class="block px-4 py-2 hover:bg-purple-800">Data</a>
-                    </li>
+                    @if(Auth::check() && Auth::user()->admin == 1)
+                    <!-- Sidebar untuk Admin -->
+                    <li><a href="/dashboard" class="block px-4 py-2 hover:bg-purple-800">Dashboard</a></li>
+                    <li><a href="/range" class="block px-4 py-2 hover:bg-purple-800">Range</a></li>
+                    <li><a href="/normalisasi" class="block px-4 py-2 hover:bg-purple-800">Normalisasi</a></li>
+                    <li><a href="/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a></li>
+                    <li><a href="/data" class="block px-4 py-2 hover:bg-purple-800">Data</a></li>
+                @else
+                    <!-- Sidebar untuk User -->
+                    <li><a href="/user/dashboard" class="block px-4 py-2 hover:bg-purple-800">Dashboard</a></li>
+                    <li><a href="/range" class="block px-4 py-2 hover:bg-purple-800">Range</a></li>
+                    <li><a href="/normalisasi" class="block px-4 py-2 hover:bg-purple-800">Normalisasi</a></li>
+                    <li><a href="/user/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a></li>
+                    <li><a href="/user/input-bobot" class="block px-4 py-2 hover:bg-purple-800">Input Bobot</a></li>
+                @endif                
                 </ul>
             </nav>
             <div class="p-4">
@@ -62,8 +62,7 @@
         <!-- Page Content -->
         <main class="">
             @yield('content')
-            @yield('hasil') <!-- Use $hasil if it's set, otherwise an empty string -->
-             <!-- This allows for additional content to be injected -->
+            @yield('hasil')
         </main>
     </div>
 </body>
