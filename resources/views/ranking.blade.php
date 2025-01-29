@@ -26,13 +26,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                        @foreach ($rankedUniversities as $index => $university)
-                            <tr>
-                                <td class="border border-gray-200 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-200 px-4 py-2">{{ $university['nama'] }}</td>
-                                <td class="border border-gray-200 px-4 py-2">{{ number_format($university['total_score'], 4) }}</td>
-                            </tr>
-                        @endforeach
+                    @foreach ($rankedUniversities as $index => $university)
+                        <tr>
+                            <td class="border border-gray-200 px-4 py-2">{{ $index + 1 }}</td>
+                            <td class="border border-gray-200 px-4 py-2">{{ $university['nama'] }}</td>
+                            <td class="border border-gray-200 px-4 py-2">{{ number_format($university['total_score'], 4) }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

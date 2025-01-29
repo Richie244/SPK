@@ -36,8 +36,8 @@
                     <li><a href="/user/dashboard" class="block px-4 py-2 hover:bg-purple-800">Dashboard</a></li>
                     <li><a href="/range" class="block px-4 py-2 hover:bg-purple-800">Range</a></li>
                     <li><a href="/normalisasi" class="block px-4 py-2 hover:bg-purple-800">Normalisasi</a></li>
-                    <li><a href="/user/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a></li>
-                    <li><a href="/user/input-bobot" class="block px-4 py-2 hover:bg-purple-800">Input Bobot</a></li>
+                    <li><a href="/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a></li>
+                    <li><a href="/bobot" class="block px-4 py-2 hover:bg-purple-800">Input Bobot</a></li>
                 @endif                
                 </ul>
             </nav>

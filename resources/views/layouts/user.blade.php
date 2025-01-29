@@ -53,10 +53,10 @@
                             <a href="/normalisasi" class="block px-4 py-2 hover:bg-purple-800">Normalisasi</a>
                         </li>
                         <li>
-                            <a href="/user/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a>
+                            <a href="/ranking" class="block px-4 py-2 hover:bg-purple-800">Ranking</a>
                         </li>
                         <li>
-                            <a href="/user/input-bobot" class="block px-4 py-2 hover:bg-purple-800">Input Bobot</a>
+                            <a href="/bobot" class="block px-4 py-2 hover:bg-purple-800">Input Bobot</a>
                         </li>
                     @endif
                 </ul>

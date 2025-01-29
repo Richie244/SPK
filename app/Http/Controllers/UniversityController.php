@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BobotKriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Untuk autentikasi
 use App\Models\University;
+use Illuminate\Support\Facades\Log;
 
 class UniversityController extends Controller
 {
@@ -129,21 +131,25 @@ public function ranking(Request $request)
 
     public function store(Request $request)
     {
-        // Validasi data
-        $validated = $request->validate([
-            'id' => 'required|string|max:50',
-            'nama' => 'required|string|max:100',
-            'spp' => 'required|numeric|min:0',
-            'akreditasi' => 'required|string|max:50',
-            'dosen_s3' => 'required|integer|min:0',
-            'lokasi' => 'required|string|max:50',
-        ]);
+         // Debugging: Lihat semua input yang diterima
+    Log::info($request->all());
 
-        // Simpan data ke database
-        \App\Models\University::create($validated);
+    $input = $request->all();
 
-        // Redirect kembali ke halaman utama
-        return redirect()->route('dashboard')->with('success', 'Data universitas berhasil ditambahkan!');
+    // Pastikan 'bobot' ada dalam input
+    if (!isset($input['bobot'])) {
+        return redirect()->back()->withErrors(['bobot' => 'Data bobot tidak ditemukan.']);
+    }
+
+    foreach ($input['bobot'] as $id => $custom_bobot) {
+        $bobot = BobotKriteria::find($id);
+        if ($bobot) {
+            $bobot->custom_bobot = $custom_bobot;
+            $bobot->save();
+        }
+    }
+
+    return redirect()->route('bobot')->with('success', 'Bobot berhasil diperbarui!');
     }
 
     public function edit($id)
@@ -183,4 +189,30 @@ public function ranking(Request $request)
         return redirect()->route('data')->with('success', 'Data universitas berhasil dihapus!');
     }
 
+    public function bobotForm()
+{
+    $universities = University::all(); // Ambil data universitas
+    return view('bobot', ['universities' => $universities]); // Return ke view
+}
+
+public function storeBobot(Request $request)
+{
+    $request->validate([
+        'bobot' => 'required|array',
+        'bobot.*' => 'required|numeric|min:0|max:1',
+    ]);
+
+    $totalBobot = array_sum($request->bobot);
+    if ($totalBobot != 1) {
+        return redirect()->back()->withErrors(['bobot' => 'Total bobot harus sama dengan 1.']);
+    }
+
+    foreach ($request->bobot as $id => $value) {
+        $university = University::findOrFail($id);
+        $university->bobot = $value;
+        $university->save();
+    }
+
+    return redirect()->route('bobot.form')->with('success', 'Bobot berhasil disimpan!');
+}
 }

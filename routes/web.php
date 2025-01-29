@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UniversityController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BobotController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/range', [UniversityController::class, 'range'])->name('range');
     Route::get('/normalisasi', [UniversityController::class, 'normalisasi'])->name('normalisasi');
     Route::get('/ranking', [UniversityController::class, 'ranking'])->name('ranking');
+
+    // Bobot
+    Route::get('/bobot', [BobotController::class, 'index'])->name('bobot.form');
+    Route::post('/bobot', [BobotController::class, 'store'])->name('bobot.store');
 
     // Profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
