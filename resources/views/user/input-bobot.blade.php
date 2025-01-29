@@ -3,7 +3,7 @@
 @section('content')
 <div class="min-h-screen bg-gray-100">
     <div class="bg-purple-700 text-white px-6 py-4">
-        <h1 class="text-xl font-bold">Sistem Penilaian Universitas</h1>
+        <h1 class="text-xl font-bold">Sistem Penilaian Universitas dengan Prodi Sistem Informasi Terbaik</h1>
     </div>
     <div class="container mx-auto p-6">
         <div class="bg-white p-6 shadow rounded-lg">
@@ -43,6 +43,59 @@
                 </div>
             </form>
         </div>
+
+        <div class="bg-white p-6 shadow rounded-lg mt-6">
+            <h2 class="text-2xl font-bold">Google Autocomplete Address</h2>
+            <form>
+                <input id="autocomplete" type="text" placeholder="Enter your address" style="width: 100%; padding: 10px; font-size: 16px;" />
+            </form>
+            <br />
+            <div id="map" style="height: 400px; width: 100%;"></div>
+        </div>
     </div>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
+<script>
+    let autocomplete, map, marker;
+
+    function initAutocomplete() {
+        // Initialize Google Autocomplete
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            { types: ['geocode'] }
+        );
+
+        // Initialize Google Map
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: -6.200000, lng: 106.816666 }, // Default to Jakarta
+            zoom: 15,
+        });
+
+        marker = new google.maps.Marker({
+            map: map,
+            anchorPoint: new google.maps.Point(0, -29),
+        });
+
+        // Event listener for place selection
+        autocomplete.addListener('place_changed', function () {
+            marker.setVisible(false);
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                alert("No details available for the selected address!");
+                return;
+            }
+
+            // Set map center and marker
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+        });
+    }
+
+    // Initialize on window load
+    window.onload = initAutocomplete;
+</script>
 @endsection
