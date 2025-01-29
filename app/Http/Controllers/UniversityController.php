@@ -146,6 +146,11 @@ public function ranking(Request $request)
         return redirect()->route('dashboard')->with('success', 'Data universitas berhasil ditambahkan!');
     }
 
+    public function inputbobot()
+    {
+        return view('user.input-bobot');
+    }
+
     public function edit($id)
     {
         $university = \App\Models\University::findOrFail($id);

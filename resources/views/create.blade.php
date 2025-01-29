@@ -32,10 +32,17 @@
                         <option value="Internasional">Internasional</option>
                     </select>
                 </div>
-                
                 <div class="mb-4">
                     <label for="dosen_s3" class="block text-sm font-medium text-gray-700">Tenaga Pendidik (S3)</label>
                     <input type="number" id="dosen_s3" name="dosen_s3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="mb-4">
+                    <label for="lokasi" class="block text-sm font-medium text-gray-700">Lokasi</label>
+                    <select id="lokasi" name="lokasi" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                        <option value="" disabled selected>Pilih Lokasi</option>
+                        <option value="Satu Kota">Satu Kota</option>
+                        <option value="Beda Kota">Beda Kota</option>
+                    </select>
                 </div>
                 <div class="flex justify-end">
                     <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded hover:bg-blue-600">Simpan</button>

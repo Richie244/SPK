@@ -7,7 +7,11 @@ use App\Http\Controllers\UniversityController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GoogleMapsController;
+use App\Http\Controllers\RankingController;
 use Illuminate\Support\Facades\Auth;
+
+Route::get('/autocomplete', [GoogleMapsController::class, 'index'])->name('autocomplete');
 
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
@@ -47,11 +51,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/range', [UniversityController::class, 'range'])->name('range');
     Route::get('/normalisasi', [UniversityController::class, 'normalisasi'])->name('normalisasi');
     Route::get('/ranking', [UniversityController::class, 'ranking'])->name('ranking');
+    Route::get('/user-ranking', [RankingController::class, 'userranking'])->name('userranking');
 
     // Profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('storeWeights', [RankingController::class, 'storeWeights'])->name('storeWeights');
+    Route::get('/user/input-bobot', [UniversityController::class, 'inputbobot'])->name('universities.bobot');
 });
 
 // Data dengan middleware auth dan verified
