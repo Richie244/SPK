@@ -8,7 +8,7 @@
     <div class="container mx-auto p-6">
         <div class="bg-white p-6 shadow rounded-lg">
             <h1 class="text-2xl font-bold mb-6 text-gray-800">Input Bobot Kriteria</h1>
-            <form action="{{ route('storeWeights') }}" method="POST">
+            <form id="weightsForm" action="{{ route('storeWeights') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
                     <div>
@@ -40,62 +40,44 @@
                     <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Simpan dan Lihat Ranking
                     </button>
+                    <p id="error-message" class="text-red-500 mt-2 hidden">Total bobot harus sama dengan 1.0</p>
                 </div>
             </form>
-        </div>
-
-        <div class="bg-white p-6 shadow rounded-lg mt-6">
-            <h2 class="text-2xl font-bold">Google Autocomplete Address</h2>
-            <form>
-                <input id="autocomplete" type="text" placeholder="Enter your address" style="width: 100%; padding: 10px; font-size: 16px;" />
-            </form>
-            <br />
-            <div id="map" style="height: 400px; width: 100%;"></div>
         </div>
     </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
 <script>
-    let autocomplete, map, marker;
-
-    function initAutocomplete() {
-        // Initialize Google Autocomplete
-        autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'),
-            { types: ['geocode'] }
-        );
-
-        // Initialize Google Map
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -6.200000, lng: 106.816666 }, // Default to Jakarta
-            zoom: 15,
-        });
-
-        marker = new google.maps.Marker({
-            map: map,
-            anchorPoint: new google.maps.Point(0, -29),
-        });
-
-        // Event listener for place selection
-        autocomplete.addListener('place_changed', function () {
-            marker.setVisible(false);
-            const place = autocomplete.getPlace();
-
-            if (!place.geometry) {
-                alert("No details available for the selected address!");
-                return;
-            }
-
-            // Set map center and marker
-            map.setCenter(place.geometry.location);
-            map.setZoom(15);
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-        });
+    // Function to calculate the total weight
+    function calculateTotalWeight() {
+        const spp = parseFloat(document.getElementById('spp').value) || 0;
+        const akreditasi = parseFloat(document.getElementById('akreditasi').value) || 0;
+        const dosen_s3 = parseFloat(document.getElementById('dosen_s3').value) || 0;
+        const lokasi = parseFloat(document.getElementById('lokasi').value) || 0;
+        return spp + akreditasi + dosen_s3 + lokasi;
     }
 
-    // Initialize on window load
-    window.onload = initAutocomplete;
+    // Listen for changes to the inputs
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const totalWeight = calculateTotalWeight();
+            const errorMessage = document.getElementById('error-message');
+            if (totalWeight !== 1) {
+                errorMessage.classList.remove('hidden');
+            } else {
+                errorMessage.classList.add('hidden');
+            }
+        });
+    });
+
+    // Prevent form submission if total weight is not exactly 1.0
+    document.getElementById('weightsForm').addEventListener('submit', function(event) {
+        const totalWeight = calculateTotalWeight();
+        if (totalWeight !== 1) {
+            event.preventDefault();
+            alert('Total bobot harus sama dengan 1.0');
+        }
+    });
 </script>
 @endsection

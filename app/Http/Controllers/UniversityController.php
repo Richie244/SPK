@@ -78,6 +78,7 @@ public function ranking(Request $request)
 {
     // Ambil filter dari request
     $filter = $request->get('filter');
+    
 
     // Ambil data berdasarkan filter
     $filteredUniversities = $filter 

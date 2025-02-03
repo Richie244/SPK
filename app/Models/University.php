@@ -150,37 +150,43 @@ class University extends Model
     }
     
     public static function userrankUniversitiesWithWeights($filteredUniversities, $weights)
-    {
-        $allUniversities = University::all();
+{
+    $allUniversities = University::all();
     
-        // Mapping
-        $akreditasiMapping = ['Tidak Terakreditasi' => 0, 'Baik' => 1, 'Baik Sekali' => 2, 'Unggul' => 3, 'Internasional' => 4];
-        $lokasiMapping = ['Satu Kota' => 1, 'Beda Kota' => 2];
+    // Mapping
+    $akreditasiMapping = ['Tidak Terakreditasi' => 0, 'Baik' => 1, 'Baik Sekali' => 2, 'Unggul' => 3, 'Internasional' => 4];
     
-        // Min & Max global
-        $sppMin = max($allUniversities->pluck('spp')->min(), 1);
-        $akreditasiMax = max($allUniversities->pluck('akreditasi')->map(fn($a) => $akreditasiMapping[$a] ?? 0)->max(), 1);
-        $dosenS3Max = max($allUniversities->pluck('dosen_s3')->max(), 1);
-        $lokasiMin = max($allUniversities->pluck('lokasi')->map(fn($l) => $lokasiMapping[$l] ?? 1)->min(), 1);
-    
-        return $filteredUniversities->map(function ($university) use ($sppMin, $akreditasiMax, $dosenS3Max, $lokasiMin, $akreditasiMapping, $lokasiMapping, $weights) {
-            $normalized = [
-                'SPP' => $sppMin / max($university->spp, 1),
-                'Akreditasi' => ($akreditasiMapping[$university->akreditasi] ?? 0) / $akreditasiMax,
-                'DosenS3' => $university->dosen_s3 / max($dosenS3Max, 1),
-                'Lokasi' => $lokasiMin / max($lokasiMapping[$university->lokasi] ?? 1, 1),
-            ];
-    
-            $score = (
-                ($weights['spp'] * $normalized['SPP']) +
-                ($weights['akreditasi'] * $normalized['Akreditasi']) +
-                ($weights['dosen_s3'] * $normalized['DosenS3']) +
-                ($weights['lokasi'] * $normalized['Lokasi'])
-            );
-    
-            return ['nama' => $university->nama, 'total_score' => round($score, 4)];
-        })->sortByDesc('total_score')->values();
-    }
+    // Menambahkan pengecekan Surabaya untuk lokasi
+    $lokasiMapping = ['Satu Kota' => 1, 'Beda Kota' => 2];
+
+    // Min & Max global
+    $sppMin = max($allUniversities->pluck('spp')->min(), 1);
+    $akreditasiMax = max($allUniversities->pluck('akreditasi')->map(fn($a) => $akreditasiMapping[$a] ?? 0)->max(), 1);
+    $dosenS3Max = max($allUniversities->pluck('dosen_s3')->max(), 1);
+
+    return $filteredUniversities->map(function ($university) use ($sppMin, $akreditasiMax, $dosenS3Max, $lokasiMapping, $akreditasiMapping, $weights) {
+        // Pengecekan lokasi berdasarkan kota
+        $lokasi = strpos(strtolower($university->lokasi), 'surabaya') !== false ? 'Satu Kota' : 'Beda Kota';
+
+        // Normalisasi
+        $normalized = [
+            'SPP' => $sppMin / max($university->spp, 1),
+            'Akreditasi' => ($akreditasiMapping[$university->akreditasi] ?? 0) / $akreditasiMax,
+            'DosenS3' => $university->dosen_s3 / max($dosenS3Max, 1),
+            'Lokasi' => $lokasiMapping[$lokasi] ?? 2, // Default ke 'Beda Kota' jika lokasi tidak ditemukan
+        ];
+
+        $score = (
+            ($weights['spp'] * $normalized['SPP']) +
+            ($weights['akreditasi'] * $normalized['Akreditasi']) +
+            ($weights['dosen_s3'] * $normalized['DosenS3']) +
+            ($weights['lokasi'] * $normalized['Lokasi'])
+        );
+
+        return ['nama' => $university->nama, 'total_score' => round($score, 4)];
+    })->sortByDesc('total_score')->values();
+}
+
     
 
 }
