@@ -95,7 +95,27 @@ public function ranking(Request $request)
     ]);
 }
 
+public function userranking(Request $request)
+{
+    // Ambil filter dari request
+    $filter = $request->get('filter');
+    $userLocation = $request->get('user_location', 'Surabaya');
 
+    // Ambil data berdasarkan filter
+    $filteredUniversities = $filter 
+        ? University::where('pt', $filter)->get() 
+        : University::all();
+
+    // Hitung ranking berdasarkan bobot dan normalisasi global
+    $rankedUniversities = University::rankUniversitiesWithWeights($filteredUniversities, $userLocation);
+
+    // Kirim data ke view
+    return view('user-ranking', [
+        'rankedUniversities' => $rankedUniversities, 
+        'filter' => $filter,
+        'userLocation' => $userLocation,
+    ]);
+}
 
 
     
@@ -138,6 +158,7 @@ public function ranking(Request $request)
             'akreditasi' => 'required|string|max:50',
             'dosen_s3' => 'required|integer|min:0',
             'lokasi' => 'required|string|max:50',
+            'pt' => 'required|string|max:50',
         ]);
 
         // Simpan data ke database
@@ -167,6 +188,7 @@ public function ranking(Request $request)
             'akreditasi' => 'required|string|max:255',
             'dosen_s3' => 'required|integer|min:0',
             'lokasi' => 'required|string|max:50',
+            'pt' => 'required|string|max:50',
         ]);
 
         // Perbarui data di database

@@ -40,6 +40,14 @@
                     <label for="lokasi" class="block text-sm font-medium text-gray-700">Lokasi</label>
                     <input type="text" id="lokasi" name="lokasi" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                 </div>
+                <div class="mb-4">
+                    <label for="pt" class="block text-sm font-medium text-gray-700">PT</label>
+                    <select id="pt" name="pt" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                        <option value="" disabled selected>Pilih PT</option>
+                        <option value="PTS">PTS</option>
+                        <option value="PTN">PTN</option>
+                    </select>
+                </div>
                 <div class="flex justify-end">
                     <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded hover:bg-blue-600">Simpan</button>
                     <button type="button" onclick="location.href='{{ route('data') }}'" class="ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Batal</button>

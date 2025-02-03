@@ -7,10 +7,19 @@
     </div>
     <div class="container mx-auto p-6">
         <div class="bg-white p-6 shadow rounded-lg">
-            <h1 class="text-2xl font-bold mb-6 text-gray-800">Input Bobot Kriteria</h1>
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">Input Lokasi dan Bobot Kriteria</h1>
             <form id="weightsForm" action="{{ route('storeWeights') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
+                    <!-- Input Lokasi Pengguna -->
+                    <div>
+                        <label for="user_location" class="block text-sm font-medium text-gray-700">Lokasi Anda (Nama Kota)</label>
+                        <input type="text" name="user_location" id="user_location" 
+                               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500" 
+                               value="{{ session('user_location', '') }}" placeholder="Contoh: Surabaya" required>
+                    </div>
+
+                    <!-- Input Bobot -->
                     <div>
                         <label for="spp" class="block text-sm font-medium text-gray-700">Bobot SPP</label>
                         <input type="number" step="0.01" name="bobot[spp]" id="spp" 
@@ -36,6 +45,7 @@
                                value="{{ session('bobot.lokasi', 0.2) }}" required>
                     </div>
                 </div>
+
                 <div class="mt-6">
                     <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Simpan dan Lihat Ranking
@@ -48,7 +58,6 @@
 </div>
 
 <script>
-    // Function to calculate the total weight
     function calculateTotalWeight() {
         const spp = parseFloat(document.getElementById('spp').value) || 0;
         const akreditasi = parseFloat(document.getElementById('akreditasi').value) || 0;
@@ -57,9 +66,7 @@
         return spp + akreditasi + dosen_s3 + lokasi;
     }
 
-    // Listen for changes to the inputs
-    const inputs = document.querySelectorAll('input[type="number"]');
-    inputs.forEach(input => {
+    document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('input', function() {
             const totalWeight = calculateTotalWeight();
             const errorMessage = document.getElementById('error-message');
@@ -71,7 +78,6 @@
         });
     });
 
-    // Prevent form submission if total weight is not exactly 1.0
     document.getElementById('weightsForm').addEventListener('submit', function(event) {
         const totalWeight = calculateTotalWeight();
         if (totalWeight !== 1) {
