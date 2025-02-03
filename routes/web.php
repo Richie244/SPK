@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/universitas/{id}/edit', [UniversityController::class, 'edit'])->name('universities.edit');
     Route::put('/universitas/{id}', [UniversityController::class, 'update'])->name('universities.update');
     Route::delete('/universitas/{id}', [UniversityController::class, 'destroy'])->name('universities.destroy');
+    // Route untuk menampilkan detail universitas
+    //Route::get('/universitas/{id}', [UniversityController::class, 'show'])->name('universities.show');
+    Route::get('/universitas/{id}', [UniversityController::class, 'show'])->name('show');
 
     // Rute tambahan
     Route::get('/dashboard', [UniversityController::class, 'index'])->name('dashboard');

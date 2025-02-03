@@ -187,5 +187,15 @@ public function ranking(Request $request)
         // Redirect kembali ke halaman utama dengan pesan sukses
         return redirect()->route('data')->with('success', 'Data universitas berhasil dihapus!');
     }
+    
+    public function show($nama)
+{
+    // Cari universitas berdasarkan nama
+    $university = University::where('nama', $nama)->firstOrFail();
+
+    // Kirim data ke view
+    return view('show', compact('university'));
+}
+
 
 }
